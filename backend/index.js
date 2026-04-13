@@ -9,7 +9,6 @@ const corsOptions = {
   origin: process.env.CORS_URLS || [
     "https://realtime-poll-woc.netlify.app",
     "https://realtime-poll-admin.netlify.app",
-    "*",
     "http://127.0.0.1:5501",
     "http://192.168.1.10:5501",
   ],
@@ -22,7 +21,12 @@ app.use(cors(corsOptions));
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: [
+      "https://realtime-poll-woc.netlify.app",
+      "https://realtime-poll-admin.netlify.app",
+      "http://127.0.0.1:5501",
+      "http://192.168.1.10:5501",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -75,7 +79,6 @@ io.on("connection", (socket) => {
   // Handle client disconnection
   socket.on("disconnect", () => {
     console.log(`User disconnected: ${socket.id}`);
-    delete users[socket.id];
   });
 });
 
